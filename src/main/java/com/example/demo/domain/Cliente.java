@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.example.demo.domain.enums.TipoCliente;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Cliente implements Serializable {
@@ -22,22 +23,24 @@ public class Cliente implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;	
+	private Integer id;
 	private String nome;
 	private String email;
 	private String cpfOuCpnj;
 	private Integer tipo;
-	
-	@OneToMany(mappedBy="cliente")
+
+	@JsonManagedReference
+	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 
 	@ElementCollection
-	@CollectionTable(name="TELEFONE")
-	private Set<String> telefones = new HashSet<>();	
-						
-	 public Cliente() {
-		 
-	 }
+	@CollectionTable(name = "TELEFONE")
+	private Set<String> telefones = new HashSet<>();
+	
+	private List<Pedido> pedidos = new ArrayList<Pedido>();
+	
+	public Cliente() {
+	}
 
 	public Cliente(Integer id, String nome, String email, String cpfOuCpnj, TipoCliente tipo) {
 		super();
@@ -108,4 +111,46 @@ public class Cliente implements Serializable {
 		super();
 		this.id = id;
 	}
+
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cliente other = (Cliente) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (tipo == null) {
+			if (other.tipo != null)
+				return false;
+		} else if (!tipo.equals(other.tipo))
+			return false;
+		return true;
+	}
+	
+	
+	
 }

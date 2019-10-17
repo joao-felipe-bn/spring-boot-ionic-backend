@@ -14,7 +14,8 @@ public @interface ClienteInsert {
 
 	String message()
 
-	default "Erro de validação";Class<?>[] groups() default {};
+	default "Erro de validação";
+	Class<?>[] groups() default {};
 
 	Class<? extends Payload>[] payload() default {};
 }
